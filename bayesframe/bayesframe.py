@@ -1,7 +1,7 @@
 import numpy as np
 from linzoo import LinZoo
 import pandas as pd
-from skelean.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error
 
 class BayesFrame:
     """A Bayesian model selection and averaging performer."""
@@ -42,9 +42,9 @@ class BayesFrame:
                 slope = v['slope']
                 intercept = v['intercept']
                 des = k.split('_')
-                E_bic += [(intercept + sum(m*D[n] for m, n in zip(slope, des)),
+                E_Bic += [(intercept + sum(m*D[n] for m, n in zip(slope, des)),
                     v['Delta_BIC'])]
-            return self.get_bma(E_bic)
+            return self.get_bma(E_Bic)
 
     def get_bma(self, E):
         Delta_BIC = np.array([i[1] for i in E])
@@ -64,15 +64,8 @@ class BayesFrame:
         
         if print_rmse:
             Epr = out_df['Epred'].to_numpy()
-            E_tr = out_df['Target'].to_numpy()
-            print(np.sqrt(mean_squared_error(Epr, Etr)))
+            Etr = out_df['Target'].to_numpy()
+            print('Computed RMSE: {}'.format(np.sqrt(
+                mean_squared_error(Epr, Etr))))
 
             
-
-
-
-
-        
-
-
-
