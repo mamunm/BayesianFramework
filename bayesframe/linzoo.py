@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from linreg import LinReg
+from .linreg import LinReg
 from itertools import combinations
 import matplotlib.pyplot as plt
 

@@ -14,8 +14,7 @@ setuptools.setup(
     author="Osman Mamun",
     author_email="mamunm@stanford.edu",
 
-    description="A framework for Bayesian model selection (BMS) and Bayesian"
-    description += " model Averaging (BMA).",
+    description="A framework for Bayesian model selection (BMS) and Bayesian model Averaging (BMA).",
     long_description=readme,
     license='GPL-3.0',
 

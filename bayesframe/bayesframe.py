@@ -1,5 +1,5 @@
 import numpy as np
-from linzoo import LinZoo
+from .linzoo import LinZoo
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 
@@ -52,7 +52,7 @@ class BayesFrame:
         ExDBIC = np.exp(-Delta_BIC/2)
         return np.sum(ExDBIC * E) / np.sum(ExDBIC)
 
-    def get_prediction(self, fpath, outpath=None, print_rmse=True):
+    def __call__(self, fpath, outpath=None, print_rmse=True):
         data = pd.read_csv(fpath, encoding="utf-8").to_dict(orient="records")
         for d in data:
             d['Epred'] = self.get_Epred(d)
