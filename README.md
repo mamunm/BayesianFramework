@@ -102,7 +102,7 @@ To save a plot, use the following one liner:
 linzoo.plot_envelope().savefig('BIC_Envelope.png')
 ```
 
-In the above code snippet for `LinZoo` demonstration, `df` is the dataframe, `target` is the column name of the target properties, `val_scheme` is the same as validation scheme described in `LinReg` section, and `bic_scheme` is the scheme to compute the Bayesian Informatio Criteria (BIC). For equal amount of data points for each model, use `None` but for varying amount of data points, use `per_n`. Insted of passing a dataframe to instantiate the class object, you can also pass the `fpath` of the csv file.
+In the above code snippet for `LinZoo` demonstration, `df` is the dataframe, `target` is the column name of the target properties, `val_scheme` is same as validation scheme described in `LinReg` section, and `bic_scheme` is the scheme to compute the Bayesian Information Criteria (BIC). For equal amount of data points for each model, use `None` but for varying amount of data points, use `per_n`. Insted of passing a dataframe to instantiate the class object, you can also pass the `fpath` of the csv file.
 
 ### BayesFrame
 
@@ -118,7 +118,8 @@ from bayesframe import load_test_data
 data = load_data()
 
 #Initialize the model
-bframe = BayesFrame(df=data, target="Target", val_scheme=None, bic_scheme="per_n", model_scheme=["selection"])
+bframe = BayesFrame(df=data, target="Target", val_scheme=None, 
+                    bic_scheme="per_n", model_scheme=["selection"])
 
 #Print the best model
 print(bframe.zoo)
@@ -134,7 +135,7 @@ It will print:
   'slope': array([-1.04318739,  0.52604511,  0.39987429,  1.14262368])}}
 ```
 
-In the above code, `df` (you can also use `fpath`), `target`, `val_scheme`, and `bic_scheme` has the same meaning as `LinZoo` class. `model_scheme` is the specification of which sheme to use for model deployment. `["selection"]` will use the best model to make future prediction. To use Bayesian Model Averaging (BMA), use `["averaging", "all"]` whcich will use all models in the averaging scheme. If you want to use only the low lying models, use numerical value instead of "all", e.g., `0.5`  to take models which are within `$\frac{\sigma - \sigma_0}{|\sigma_0|} = 0.5` Occam's window. 
+In the above code, `df` (you can also use `fpath`), `target`, `val_scheme`, and `bic_scheme` has the same meaning as `LinZoo` class. `model_scheme` is the specification of which sheme to use for model deployment. `["selection"]` will use the best model to make future prediction. To use Bayesian Model Averaging (BMA), use `["averaging", "all"]` which will use all models in the averaging scheme. If you want to use only the low lying models, use numerical value instead of "all", e.g., `0.5`  to take models which are within `$\frac{\sigma - \sigma_0}{|\sigma_0|} = 0.5$` Occam's window. 
 
 To make prediction with the model:
 
@@ -165,7 +166,8 @@ from bayesframe import load_test_data
 data = load_data()
 
 #Initialize the model
-bframe = BayesFrame(df=data, target="Target", val_scheme=None, bic_scheme="per_n", model_scheme=["averaging", "all"])
+bframe = BayesFrame(df=data, target="Target", val_scheme=None, 
+                    bic_scheme="per_n", model_scheme=["averaging", "all"])
 
 #Load the test data
 t_data = load_test_data()
