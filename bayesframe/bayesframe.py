@@ -52,12 +52,15 @@ class BayesFrame:
         ExDBIC = np.exp(-Delta_BIC/2)
         return np.sum(ExDBIC * E) / np.sum(ExDBIC)
 
-    def __call__(self, fpath, outpath=None, print_rmse=True):
-        data = pd.read_csv(fpath, encoding="utf-8").to_dict(orient="records")
+    def __call__(self, fpath=None, data=None, outpath=None, print_rmse=True):
+        if fpath:
+            data = pd.read_csv(fpath, encoding="utf-8").to_dict(orient="records")
+        else:
+            data = data
         for d in data:
             d['Epred'] = self.get_Epred(d)
         out_df = pd.DataFrame(data)
-        if outpath == None:
+        if outpath:
             out_df.to_csv(fpath)
         else:
             out_df.to_csv(outpath)

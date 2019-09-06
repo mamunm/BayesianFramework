@@ -8,11 +8,15 @@ class LinZoo:
     """An object to build the linear regression zoo from a given dataframe"""
 
     def __init__(self, 
-                 fpath=None, 
+                 fpath=None,
+                 df = None,
                  target=None,
                  val_scheme=None,
                  bic_scheme='per_n'):
-        self.df = pd.read_csv(fpath, encoding="utf-8")
+        if fpath:
+            self.df = pd.read_csv(fpath, encoding="utf-8")
+        else:
+            self.df = df
         self.target = [target]
         self.val_scheme = val_scheme
         self.bic_scheme = bic_scheme
