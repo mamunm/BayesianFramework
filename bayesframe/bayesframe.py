@@ -8,12 +8,13 @@ class BayesFrame:
 
     def __init__(self,
                  fpath=None,
+                 df=None,
                  target=None,
                  val_scheme=None,
                  bic_scheme=None,
                  model_scheme=['selection']):
         
-        lin = LinZoo(fpath=fpath, target=target, 
+        lin = LinZoo(fpath=fpath, df=df, target=target, 
                      val_scheme=val_scheme, bic_scheme=bic_scheme)
         lin.build_zoo()
         self.zoo = lin.zoo
@@ -52,11 +53,12 @@ class BayesFrame:
         ExDBIC = np.exp(-Delta_BIC/2)
         return np.sum(ExDBIC * E) / np.sum(ExDBIC)
 
-    def __call__(self, fpath=None, data=None, outpath=None, print_rmse=True):
+    def __call__(self, fpath=None, data=None, target=None,
+            outpath=None, print_rmse=True):
         if fpath:
             data = pd.read_csv(fpath, encoding="utf-8").to_dict(orient="records")
         else:
-            data = data
+            data = data.to_dict(orient="records")
         for d in data:
             d['Epred'] = self.get_Epred(d)
         out_df = pd.DataFrame(data)
@@ -65,9 +67,9 @@ class BayesFrame:
         else:
             out_df.to_csv(outpath)
         
-        if print_rmse:
+        if print_rmse and target:
             Epr = out_df['Epred'].to_numpy()
-            Etr = out_df['Target'].to_numpy()
+            Etr = out_df[target].to_numpy()
             print('Computed RMSE: {}'.format(np.sqrt(
                 mean_squared_error(Epr, Etr))))
 

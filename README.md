@@ -65,7 +65,6 @@ print(lin.get_model_data())
 Running this script will produce the following output:
 
 ```shell
-print(lin.get_model_data())
 {'slope': array([0.14213999]), 'intercept': 20.917579117799832, 'rmse': 8.60490557714858, 'n_dp': 506}
 ```
 
@@ -73,7 +72,7 @@ Here, the `slope` and `intercept` are the model parameters, `n_dp` is the number
 
 ### LinZoo
 
-Now, we show a simple demonstration of the `bayesframe.linzoo.LinZoo` function:
+Now, a simple demonstration of the `bayesframe.LinZoo` function:
 
 ```python
 #import module
@@ -84,10 +83,101 @@ from bayesframe import LinZoo
 data = load_data()
 
 #Initialize the model
+linzoo = LinZoo(df=data, target="Target", val_scheme=None, bic_scheme="per_n")
+
+#Build the zoo 
+linzoo.build_zoo()
+
+#Plot and show the envelope
+linzoo.plot_envelope().show()  
 ```
+
+This will show the following plot in a matplotlib GUI:
+
+![BIC envelope plot](plots/BIC_Envelope.png)
+
+To save a plot, use the following one liner:
+
+```python
+linzoo.plot_envelope().savefig('BIC_Envelope.png')
+```
+
+In the above code snippet for `LinZoo` demonstration, `df` is the dataframe, `target` is the column name of the target properties, `val_scheme` is the same as validation scheme described in `LinReg` section, and `bic_scheme` is the scheme to compute the Bayesian Informatio Criteria (BIC). For equal amount of data points for each model, use `None` but for varying amount of data points, use `per_n`. Insted of passing a dataframe to instantiate the class object, you can also pass the `fpath` of the csv file.
 
 ### BayesFrame
 
+Now, we are all set to move on to building the Bayesian Model Selection and Averaging part. The following code illustrates how to use it:
 
+```python
+#Import modeule
+from bayesframe import BayesFrame
+from bayesframe import load_data 
+from bayesframe import load_test_data
 
+#Load the data
+data = load_data()
 
+#Initialize the model
+bframe = BayesFrame(df=data, target="Target", val_scheme=None, bic_scheme="per_n", model_scheme=["selection"])
+
+#Print the best model
+print(bframe.zoo)
+```
+It will print:
+
+```shell
+{'O_N_CH2_NH': {'BIC': 1.1925678847679801,
+  'Delta_BIC': 0.0,
+  'intercept': 1.5896455262621,
+  'n_dp': 20,
+  'rmse': 0.08917024884254064,
+  'slope': array([-1.04318739,  0.52604511,  0.39987429,  1.14262368])}}
+```
+
+In the above code, `df` (you can also use `fpath`), `target`, `val_scheme`, and `bic_scheme` has the same meaning as `LinZoo` class. `model_scheme` is the specification of which sheme to use for model deployment. `["selection"]` will use the best model to make future prediction. To use Bayesian Model Averaging (BMA), use `["averaging", "all"]` whcich will use all models in the averaging scheme. If you want to use only the low lying models, use numerical value instead of "all", e.g., `0.5`  to take models which are within `$\frac{\sigma - \sigma_0}{|\sigma_0|} = 0.5` Occam's window. 
+
+To make prediction with the model:
+
+```python
+#Load the test data
+t_data = load_test_data()
+
+#Make prediction on the test data
+bframe(data=t_data, outpath="out.csv", target="Target", print_rmse=True)
+```
+It will print out the following line in the console:
+
+```shell
+Computed RMSE: 0.0902776566069057
+```
+
+Here, `data` is the dataframe to make prediction on. Alternatively, you can specify the path to csv file using `fpath`. `outpath` is the path to the csv file where output will be written in. `target` is the column of the target properties and `print_rmse` will print rmse onto the console.
+
+To use averaging, change few lines:
+
+```python
+#Import modeule
+from bayesframe import BayesFrame
+from bayesframe import load_data 
+from bayesframe import load_test_data
+
+#Load the data
+data = load_data()
+
+#Initialize the model
+bframe = BayesFrame(df=data, target="Target", val_scheme=None, bic_scheme="per_n", model_scheme=["averaging", "all"])
+
+#Load the test data
+t_data = load_test_data()
+
+#Make prediction on the test data
+bframe(data=t_data, outpath="out.csv", target="Target", print_rmse=True)
+```
+
+The printed RMSE:
+
+```shell
+Computed RMSE: 0.1098828628139602
+```
+
+As expected, model averaging performance is slightly worse than model selection performance as we are averaging over all the models rather than taking the best one, in return the prediction will be much more robust than the model selection scheme. 
