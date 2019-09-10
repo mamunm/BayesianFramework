@@ -59,6 +59,7 @@ class LinZoo:
         plt.figure(facecolor='white')
         plt.style.use('classic')
         plt.grid(color='grey', linewidth=0.5, linestyle='--')
+        plt.title('BIC Envelope plot')
         plt.xlabel("# of descriptors", fontsize=14)
         plt.ylabel("BIC", fontsize=14)
         data = [(len(v['slope'])+1, v['BIC']) for v in self.zoo.values()]

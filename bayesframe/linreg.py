@@ -26,6 +26,9 @@ class LinReg:
                 'intercept': self.lr.intercept_,
                 'rmse': self.compute_RMSE(),
                 'n_dp': len(self.y)}
+
+    def predict(self, X):
+        return self.lr.predict(X)
     
     def compute_RMSE(self):
         if self.val_scheme is None:

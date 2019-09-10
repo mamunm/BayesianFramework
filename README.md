@@ -135,7 +135,8 @@ It will print:
   'slope': array([-1.04318739,  0.52604511,  0.39987429,  1.14262368])}}
 ```
 
-In the above code, `df` (you can also use `fpath`), `target`, `val_scheme`, and `bic_scheme` has the same meaning as `LinZoo` class. `model_scheme` is the specification of which sheme to use for model deployment. `["selection"]` will use the best model to make future prediction. To use Bayesian Model Averaging (BMA), use `["averaging", "all"]` which will use all models in the averaging scheme. If you want to use only the low lying models, use numerical value instead of "all", e.g., `0.5`  to take models which are within `$\frac{\sigma - \sigma_0}{|\sigma_0|} = 0.5$` Occam's window. 
+In the above code, `df` (you can also use `fpath`), `target`, `val_scheme`, and `bic_scheme` has the same meaning as `LinZoo` class. `model_scheme` is the specification of which sheme to use for model deployment. `["selection"]` will use the best model to make future prediction. To use Bayesian Model Averaging (BMA), use `["averaging", "all"]` which will use all models in the averaging scheme. If you want to use only the low lying models, use numerical value instead of "all", e.g., `0.5`  to take models which are within $\sigma_0$
+to $\sigma_0 + 0.5 \times |\sigma_0|$ Occam's window. 
 
 To make prediction with the model:
 

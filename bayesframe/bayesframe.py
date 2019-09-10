@@ -54,7 +54,7 @@ class BayesFrame:
         return np.sum(ExDBIC * E) / np.sum(ExDBIC)
 
     def __call__(self, fpath=None, data=None, target=None,
-            outpath=None, print_rmse=True):
+            outpath=None, print_rmse=False):
         if fpath:
             data = pd.read_csv(fpath, encoding="utf-8").to_dict(orient="records")
         else:
@@ -62,15 +62,13 @@ class BayesFrame:
         for d in data:
             d['Epred'] = self.get_Epred(d)
         out_df = pd.DataFrame(data)
-        if outpath:
+        if not outpath:
             out_df.to_csv(fpath)
         else:
             out_df.to_csv(outpath)
         
         if print_rmse and target:
-            Epr = out_df['Epred'].to_numpy()
-            Etr = out_df[target].to_numpy()
-            print('Computed RMSE: {}'.format(np.sqrt(
-                mean_squared_error(Epr, Etr))))
+            print('Computed RMSE: {}'.format(np.sqrt(mean_squared_error(
+                out_df['Epred'].to_numpy(), out_df[target].to_numpy()))))
 
             
