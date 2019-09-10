@@ -9,7 +9,7 @@ To use this package, you need the following packages:
 
 ```shell
 numpy>=1.12
-sklearn
+sklearn>=0.20.1
 matplotlib>=3.1
 pandas>=0.25.1
 ```
