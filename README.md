@@ -180,7 +180,7 @@ bframe(data=t_data, outpath="out.csv", target="Target", print_rmse=True)
 The printed RMSE:
 
 ```shell
-Computed RMSE: 0.1098828628139602
+Computed RMSE: 0.10988286281396
 ```
 
 As expected, model averaging performance is slightly worse than model selection performance as we are averaging over all the models rather than taking the best one, in return the prediction will be much more robust than the model selection scheme. 
